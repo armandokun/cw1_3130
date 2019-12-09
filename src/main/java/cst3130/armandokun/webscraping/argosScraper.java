@@ -41,7 +41,7 @@ public class argosScraper extends Thread {
     }
 
     /**
-     * Scrapes cornflakes data from the Ocado website
+     * Scrapes iPhone data from the Argos website
      * 
      * @throws IOException
      */
