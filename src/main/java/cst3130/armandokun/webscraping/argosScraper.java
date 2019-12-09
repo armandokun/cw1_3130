@@ -1,23 +1,51 @@
 package cst3130.armandokun.webscraping;
 
+import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-/** Example code to illustrate web scraping with JSoup */
-public class argosScraper {
+/**
+ * Argos Scraper class that is scrapping data.
+ */
+public class argosScraper extends Thread {
+    // Specifies the interval between HTTP requests to the server in seconds.
+    private int crawlDelay = 1;
 
-    /** Constructor */
+    // Allows us to shut down our application cleanly
+    volatile private boolean runThread = false;
+
+    // Default Constructor
     public argosScraper() {
-        try {
-            scrapeArgos();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+    }
+
+    @Override
+    public void run() {
+        runThread = true;
+
+        while(runThread) {
+            try{
+                scrapeArgos();
+                sleep(1000 * crawlDelay);//Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+            }
+            catch(InterruptedException | IOException ex) {
+                System.err.println(ex.getMessage());
+            }
         }
     }
 
-    /** Scrapes cornflakes data from the Ocado website */
-    void scrapeArgos() throws Exception {
+    // Other classes can use this method to terminate the thread.
+    public void stopThread() {
+        runThread = false;
+    }
+
+    /**
+     * Scrapes cornflakes data from the Ocado website
+     * 
+     * @throws IOException
+     */
+    void scrapeArgos() throws IOException {
         // Download HTML document from website
         Document doc = Jsoup.connect("https://www.argos.co.uk/search/iphones/category:42793786/").get();
 
@@ -64,10 +92,9 @@ public class argosScraper {
                 String productUrl = productLink.attr("href");
 
                 // Output the data that we have downloaded
-                System.out.println("\n ARGOS: " + i + "\n DESCRIPTION: " + description.text() + ";\n PRICE: " + price
+                System.out.println("\n ARGOS: " + "\n DESCRIPTION: " + description.text() + ";\n PRICE: " + price
                         + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
             }
         }
-        System.out.println("Scrapping has been ended...");
     }
 }
