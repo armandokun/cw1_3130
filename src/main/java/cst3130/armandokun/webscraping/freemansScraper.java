@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 /**
  * Freemans Scraper class that is scrapping data.
  */
-public class freemansScraper extends Thread {
+public class FreemansScraper extends Thread {
     // Specifies the interval between HTTP requests to the server in seconds.
     private int crawlDelay = 1;
 
@@ -16,7 +16,7 @@ public class freemansScraper extends Thread {
     volatile private boolean runThread = false;
 
     // Default Constructor
-    public freemansScraper() {
+    public FreemansScraper() {
 
     }
 

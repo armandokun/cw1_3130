@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 /**
  * OnBuy Scraper class that is scrapping data.
  */
-public class onbuyScraper extends Thread {
+public class OnbuyScraper extends Thread {
     // Specifies the interval between HTTP requests to the server in seconds.
     private int crawlDelay = 1;
 
@@ -16,7 +16,7 @@ public class onbuyScraper extends Thread {
     volatile private boolean runThread = false;
 
     // Default Constructor
-    public onbuyScraper() {
+    public OnbuyScraper() {
 
     }
 

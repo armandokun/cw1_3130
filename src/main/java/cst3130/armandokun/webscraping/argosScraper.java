@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 /**
  * Argos Scraper class that is scrapping data.
  */
-public class argosScraper extends Thread {
+public class ArgosScraper extends Thread {
     // Specifies the interval between HTTP requests to the server in seconds.
     private int crawlDelay = 1;
 
@@ -16,7 +16,7 @@ public class argosScraper extends Thread {
     volatile private boolean runThread = false;
 
     // Default Constructor
-    public argosScraper() {
+    public ArgosScraper() {
 
     }
 
