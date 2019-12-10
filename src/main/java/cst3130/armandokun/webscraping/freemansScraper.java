@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
  */
 public class FreemansScraper extends Thread {
     // Specifies the interval between HTTP requests to the server in seconds.
-    private int crawlDelay = 1;
+    private int crawlDelay = 2;
 
     // Allows us to shut down our application cleanly
     volatile private boolean runThread = false;

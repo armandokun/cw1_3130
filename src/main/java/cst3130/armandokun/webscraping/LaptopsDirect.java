@@ -8,9 +8,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 /**
- * Freemans Scraper class that is scrapping data.
+ * LaptopsDirect Scraper class that is scrapping data.
  */
-public class CurrysScraper extends Thread {
+public class LaptopsDirect extends Thread {
     // Specifies the interval between HTTP requests to the server in seconds.
     private int crawlDelay = 2;
 
@@ -18,7 +18,7 @@ public class CurrysScraper extends Thread {
     volatile private boolean runThread = false;
 
     // Default Constructor
-    public CurrysScraper() {
+    public LaptopsDirect() {
 
     }
 
@@ -28,7 +28,7 @@ public class CurrysScraper extends Thread {
 
         while(runThread) {
             try{
-                scrapeCurrys();
+                scrapeLaptopsDirect();
                 sleep(1000 * crawlDelay);//Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
             }
             catch(InterruptedException | IOException ex) {
@@ -48,34 +48,35 @@ public class CurrysScraper extends Thread {
      * @throws IOException
      * 
      */
-    void scrapeCurrys() throws IOException {
+    void scrapeLaptopsDirect() throws IOException {
         // Download HTML document from website
-        Document doc = Jsoup.connect("https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/xx-criteria.html").get();
+        Document doc = Jsoup.connect("https://www.laptopsdirect.co.uk/ct/phones-and-pdas/smartphones").get();
 
         // Get total number of available pages
 
         // Selects ul class named pagination
-        Elements totalPages = doc.select(".pagination");
+        Elements totalPages = doc.select(".sr_numresults");
 
         // Discovers size of list elements inside of ul
-        Elements totalLiElements = totalPages.select("li");
-        int pages = totalLiElements.size();
+        Elements totalLiElements = totalPages.select("b:nth-child(2)");
+        int pages = Integer.parseInt(totalLiElements.first().text());
 
         // Work through pages
-        for (int pageNumber = 1; pageNumber < pages; ++pageNumber) {
+            // HTML shows only 24 results per page
+        for (int pageNumber = 1; pageNumber < pages/24+1; ++pageNumber) {
 
             //Converts int to String for correct url doc1
-            String jsoupGet = String.valueOf("https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/" + pageNumber + "_20/relevance-desc/xx-criteria.html");
+            String jsoupGet = String.valueOf("https://www.laptopsdirect.co.uk/ct/phones-and-pdas/smartphones?pageNumber=" + pageNumber);
 
             // Download HTML document from website for the next page
             Document doc1 = Jsoup.connect(jsoupGet).get();
 
             // Get all of the products on the page 1
-            Elements products = doc.select("article.product.result-prd.productCompare.clearfix");
+            Elements products = doc.select(".OfferBox");
 
             if (pageNumber > 1) {
                 // Get all of the products in the next page
-                products = doc1.select("article.product.result-prd.productCompare.clearfix");
+                products = doc1.select(".OfferBox");
             }
 
             System.out.println("\n Page Number: " + pageNumber);
@@ -84,25 +85,25 @@ public class CurrysScraper extends Thread {
             for (int i = 0; i < products.size(); ++i) {
 
                 // Get the product description
-                Elements description = products.get(i).select(".productTitle");
+                Elements description = products.get(i).select("a.offerboxtitle");
 
                 // Get the product price
-                Elements price1 = products.get(i).select(".price");
+                Elements price1 = products.get(i).select("span.offerprice");
 
                 // Deletes pound symbol from the price and formats to float
                 String scrapedPrice = price1.text().replace("£", "");
                 
                 // Get the image url
-                Elements image = products.get(i).select(".lozadImage");
-                String imageUrl = image.select("source").attr("srcset");
+                Elements image = products.get(i).select(".offerImage");
+                String imageUrl = image.attr("src");
 
                 // Get product url
-                Elements productLink = products.get(i).select("a");
+                Elements productLink = products.get(i).select("a.offerboxlink.btn-prime");
                 String productUrl = productLink.attr("href");
 
                 // Output the data that we have downloaded
-                System.out.println("\n CURRYS: " + description.text() + ";\n PRICE: " + scrapedPrice
-                + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl + ";");
+                System.out.println("\n LAPTOPSDIRECT: " + description.text() + ";\n PRICE: " + scrapedPrice
+                + ";\n IMAGE_URL: https://www.laptopsdirect.co.uk" + imageUrl + ";\n PRODUCT_URL: https://www.laptopsdirect.co.uk" + productUrl + ";");
             }
         }
     }
