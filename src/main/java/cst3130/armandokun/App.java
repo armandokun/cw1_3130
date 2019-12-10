@@ -10,7 +10,7 @@ public class App {
 
         // Starts the scraping threads from ScraperManager
         sm.startScrapers();
-        
+
     }
 
 }

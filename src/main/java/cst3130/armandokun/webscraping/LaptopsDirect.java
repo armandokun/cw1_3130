@@ -26,12 +26,11 @@ public class LaptopsDirect extends Thread {
     public void run() {
         runThread = true;
 
-        while(runThread) {
-            try{
+        while (runThread) {
+            try {
                 scrapeLaptopsDirect();
-                sleep(1000 * crawlDelay);//Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            }
-            catch(InterruptedException | IOException ex) {
+                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+            } catch (InterruptedException | IOException ex) {
                 System.err.println(ex.getMessage());
             }
         }
@@ -62,11 +61,12 @@ public class LaptopsDirect extends Thread {
         int pages = Integer.parseInt(totalLiElements.first().text());
 
         // Work through pages
-            // HTML shows only 24 results per page
-        for (int pageNumber = 1; pageNumber < pages/24+1; ++pageNumber) {
+        // HTML shows only 24 results per page
+        for (int pageNumber = 1; pageNumber < pages / 24 + 1; ++pageNumber) {
 
-            //Converts int to String for correct url doc1
-            String jsoupGet = String.valueOf("https://www.laptopsdirect.co.uk/ct/phones-and-pdas/smartphones?pageNumber=" + pageNumber);
+            // Converts int to String for correct url doc1
+            String jsoupGet = String
+                    .valueOf("https://www.laptopsdirect.co.uk/ct/phones-and-pdas/smartphones?pageNumber=" + pageNumber);
 
             // Download HTML document from website for the next page
             Document doc1 = Jsoup.connect(jsoupGet).get();
@@ -92,7 +92,7 @@ public class LaptopsDirect extends Thread {
 
                 // Deletes pound symbol from the price and formats to float
                 String scrapedPrice = price1.text().replace("£", "");
-                
+
                 // Get the image url
                 Elements image = products.get(i).select(".offerImage");
                 String imageUrl = image.attr("src");
@@ -103,7 +103,8 @@ public class LaptopsDirect extends Thread {
 
                 // Output the data that we have downloaded
                 System.out.println("\n LAPTOPSDIRECT: " + description.text() + ";\n PRICE: " + scrapedPrice
-                + ";\n IMAGE_URL: https://www.laptopsdirect.co.uk" + imageUrl + ";\n PRODUCT_URL: https://www.laptopsdirect.co.uk" + productUrl + ";");
+                        + ";\n IMAGE_URL: https://www.laptopsdirect.co.uk" + imageUrl
+                        + ";\n PRODUCT_URL: https://www.laptopsdirect.co.uk" + productUrl + ";");
             }
         }
     }

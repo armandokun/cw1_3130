@@ -24,12 +24,11 @@ public class FreemansScraper extends Thread {
     public void run() {
         runThread = true;
 
-        while(runThread) {
-            try{
+        while (runThread) {
+            try {
                 scrapeFreemans();
-                sleep(1000 * crawlDelay);//Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            }
-            catch(InterruptedException | IOException ex) {
+                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+            } catch (InterruptedException | IOException ex) {
                 System.err.println(ex.getMessage());
             }
         }
@@ -47,12 +46,17 @@ public class FreemansScraper extends Thread {
      */
     void scrapeFreemans() throws IOException {
         // Download HTML document from website
-        Document doc = Jsoup.connect("https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText").get();
+        Document doc = Jsoup.connect(
+                "https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText")
+                .get();
 
         // Work through pages
         for (int pageNumber = 0; pageNumber <= 96; pageNumber += 48) {
 
-            Document doc1 = Jsoup.connect("https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText&No=" + pageNumber).get();
+            Document doc1 = Jsoup.connect(
+                    "https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText&No="
+                            + pageNumber)
+                    .get();
 
             // Get all of the products on the page 1
             Elements products = doc.select("li.pContainer");
@@ -75,7 +79,7 @@ public class FreemansScraper extends Thread {
 
                 // Deletes pound symbol from the price and formats to float
                 String scrapedPrice = price1.text().replace("£", "");
-                
+
                 // Get the image url
                 Elements image = products.get(i).select(".pImageContainer");
                 String imageUrl = image.select("img").attr("data-original");
@@ -86,7 +90,7 @@ public class FreemansScraper extends Thread {
 
                 // Output the data that we have downloaded
                 System.out.println("\n FREEMANS: " + description.text() + ";\n PRICE: " + scrapedPrice
-                + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
+                        + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
             }
         }
     }

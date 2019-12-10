@@ -26,12 +26,11 @@ public class CurrysScraper extends Thread {
     public void run() {
         runThread = true;
 
-        while(runThread) {
-            try{
+        while (runThread) {
+            try {
                 scrapeCurrys();
-                sleep(1000 * crawlDelay);//Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            }
-            catch(InterruptedException | IOException ex) {
+                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+            } catch (InterruptedException | IOException ex) {
                 System.err.println(ex.getMessage());
             }
         }
@@ -50,7 +49,9 @@ public class CurrysScraper extends Thread {
      */
     void scrapeCurrys() throws IOException {
         // Download HTML document from website
-        Document doc = Jsoup.connect("https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/xx-criteria.html").get();
+        Document doc = Jsoup.connect(
+                "https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/xx-criteria.html")
+                .get();
 
         // Get total number of available pages
 
@@ -64,8 +65,10 @@ public class CurrysScraper extends Thread {
         // Work through pages
         for (int pageNumber = 1; pageNumber < pages; ++pageNumber) {
 
-            //Converts int to String for correct url doc1
-            String jsoupGet = String.valueOf("https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/" + pageNumber + "_20/relevance-desc/xx-criteria.html");
+            // Converts int to String for correct url doc1
+            String jsoupGet = String.valueOf(
+                    "https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/"
+                            + pageNumber + "_20/relevance-desc/xx-criteria.html");
 
             // Download HTML document from website for the next page
             Document doc1 = Jsoup.connect(jsoupGet).get();
@@ -91,7 +94,7 @@ public class CurrysScraper extends Thread {
 
                 // Deletes pound symbol from the price and formats to float
                 String scrapedPrice = price1.text().replace("£", "");
-                
+
                 // Get the image url
                 Elements image = products.get(i).select(".lozadImage");
                 String imageUrl = image.select("source").attr("srcset");
@@ -101,8 +104,8 @@ public class CurrysScraper extends Thread {
                 String productUrl = productLink.attr("href");
 
                 // Output the data that we have downloaded
-                System.out.println("\n CURRYS: " + description.text() + ";\n PRICE: " + scrapedPrice
-                + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl + ";");
+                System.out.println("\n CURRYS: " + description.text() + ";\n PRICE: " + scrapedPrice + ";\n IMAGE_URL: "
+                        + imageUrl + ";\n PRODUCT_URL: " + productUrl + ";");
             }
         }
     }
