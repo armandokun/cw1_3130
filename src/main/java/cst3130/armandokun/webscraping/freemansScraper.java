@@ -9,8 +9,23 @@ import org.jsoup.select.Elements;
  * Freemans Scraper class that is scrapping data.
  */
 public class FreemansScraper extends Thread {
+    // JSoup CSS selectors
+
     // Specifies the interval between HTTP requests to the server in seconds.
-    private int crawlDelay = 2;
+    public int crawlDelay;
+
+    String storeName;
+    String jsoupDoc;
+    String jsoupDocOtherPages;
+    String productSelector;
+    String descriptionSelector;
+    String priceSelector;
+    String symbolReplacement;
+    String imageSelector;
+    String imageElSelector;
+    String imageUrlSelector;
+    String productLinkSelector;
+    String productLinkSelectorAttr;
 
     // Allows us to shut down our application cleanly
     volatile private boolean runThread = false;
@@ -34,7 +49,7 @@ public class FreemansScraper extends Thread {
         }
     }
 
-    // Other classes can use this method to terminate the thread.
+    // Terminates the thread.
     public void stopThread() {
         runThread = false;
     }
@@ -46,24 +61,19 @@ public class FreemansScraper extends Thread {
      */
     void scrapeFreemans() throws IOException {
         // Download HTML document from website
-        Document doc = Jsoup.connect(
-                "https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText")
-                .get();
+        Document doc = Jsoup.connect(jsoupDoc).get();
 
         // Work through pages
         for (int pageNumber = 0; pageNumber <= 96; pageNumber += 48) {
 
-            Document doc1 = Jsoup.connect(
-                    "https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText&No="
-                            + pageNumber)
-                    .get();
+            Document doc1 = Jsoup.connect(jsoupDocOtherPages + pageNumber).get();
 
             // Get all of the products on the page 1
-            Elements products = doc.select("li.pContainer");
+            Elements products = doc.select(productSelector);
 
             if (pageNumber > 0) {
                 // Get all of the products in the next page
-                products = doc1.select("li.pContainer");
+                products = doc1.select(productSelector);
             }
 
             System.out.println("Page Offset: " + pageNumber);
@@ -72,26 +82,138 @@ public class FreemansScraper extends Thread {
             for (int i = 0; i < products.size(); ++i) {
 
                 // Get the product description
-                Elements description = products.get(i).select(".pDescriptionContainer");
+                Elements description = products.get(i).select(descriptionSelector);
 
                 // Get the product price
-                Elements price1 = products.get(i).select(".pPriceContainer");
+                Elements price1 = products.get(i).select(priceSelector);
 
                 // Deletes pound symbol from the price and formats to float
-                String scrapedPrice = price1.text().replace("£", "");
+                String scrapedPrice = price1.text().replace(symbolReplacement, "");
 
                 // Get the image url
-                Elements image = products.get(i).select(".pImageContainer");
-                String imageUrl = image.select("img").attr("data-original");
+                Elements image = products.get(i).select(imageSelector);
+                String imageUrl = image.select(imageElSelector).attr(imageUrlSelector);
 
                 // Get product url
-                Elements productLink = products.get(i).select("a");
-                String productUrl = productLink.attr("href");
+                Elements productLink = products.get(i).select(productLinkSelector);
+                String productUrl = productLink.attr(productLinkSelectorAttr);
 
                 // Output the data that we have downloaded
-                System.out.println("\n FREEMANS: " + description.text() + ";\n PRICE: " + scrapedPrice
+                System.out.println("\n " + storeName + ": " + description.text() + ";\n PRICE: " + scrapedPrice
                         + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
             }
         }
+    }
+
+    public int getCrawlDelay() {
+        return crawlDelay;
+    }
+
+    public void setCrawlDelay(int crawlDelay) {
+        this.crawlDelay = crawlDelay;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getJsoupDoc() {
+        return jsoupDoc;
+    }
+
+    public void setJsoupDoc(String jsoupDoc) {
+        this.jsoupDoc = jsoupDoc;
+    }
+
+    public String getJsoupDocOtherPages() {
+        return jsoupDocOtherPages;
+    }
+
+    public void setJsoupDocOtherPages(String jsoupDocOtherPages) {
+        this.jsoupDocOtherPages = jsoupDocOtherPages;
+    }
+
+    public String getProductSelector() {
+        return productSelector;
+    }
+
+    public void setProductSelector(String productSelector) {
+        this.productSelector = productSelector;
+    }
+
+    public String getDescriptionSelector() {
+        return descriptionSelector;
+    }
+
+    public void setDescriptionSelector(String descriptionSelector) {
+        this.descriptionSelector = descriptionSelector;
+    }
+
+    public String getPriceSelector() {
+        return priceSelector;
+    }
+
+    public void setPriceSelector(String priceSelector) {
+        this.priceSelector = priceSelector;
+    }
+
+    public String getSymbolReplacement() {
+        return symbolReplacement;
+    }
+
+    public void setSymbolReplacement(String symbolReplacement) {
+        this.symbolReplacement = symbolReplacement;
+    }
+
+    public String getImageSelector() {
+        return imageSelector;
+    }
+
+    public void setImageSelector(String imageSelector) {
+        this.imageSelector = imageSelector;
+    }
+
+    public String getImageElSelector() {
+        return imageElSelector;
+    }
+
+    public void setImageElSelector(String imageElSelector) {
+        this.imageElSelector = imageElSelector;
+    }
+
+    public String getImageUrlSelector() {
+        return imageUrlSelector;
+    }
+
+    public void setImageUrlSelector(String imageUrlSelector) {
+        this.imageUrlSelector = imageUrlSelector;
+    }
+
+    public String getProductLinkSelector() {
+        return productLinkSelector;
+    }
+
+    public void setProductLinkSelector(String productLinkSelector) {
+        this.productLinkSelector = productLinkSelector;
+    }
+
+    public String getProductLinkSelectorAttr() {
+        return productLinkSelectorAttr;
+    }
+
+    public void setProductLinkSelectorAttr(String productLinkSelectorAttr) {
+        this.productLinkSelectorAttr = productLinkSelectorAttr;
+    }
+
+    public boolean isRunThread() {
+        return runThread;
+    }
+
+    public void setRunThread(boolean runThread) {
+        this.runThread = runThread;
     }
 }
