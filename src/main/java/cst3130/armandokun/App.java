@@ -1,16 +1,25 @@
 package cst3130.armandokun;
 
-import cst3130.armandokun.webscraping.ScraperManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import cst3130.armandokun.webscraping.*;
 
 public class App {
     public static void main(String[] args) {
 
-        // Creates an object instance of ScraperManager
-        ScraperManager sm = new ScraperManager();
+        runApplicationAnnotationsConfig();
 
-        // Starts the scraping threads from ScraperManager
-        sm.startScrapers();
+    }
 
+    static void runApplicationAnnotationsConfig() {
+        // Instruct Spring to create and wire beans using annotations.
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // Get ScraperManager bean
+        ScraperManager scrapermng = (ScraperManager) context.getBean("mng");
+
+        // Start scraping with all threads
+        scrapermng.scrapeAll();
     }
 
 }
