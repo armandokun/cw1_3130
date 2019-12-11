@@ -37,21 +37,12 @@ public class FreemansScraper extends Thread {
 
     @Override
     public void run() {
-        runThread = true;
-
-        while (runThread) {
-            try {
-                scrapeFreemans();
-                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            } catch (InterruptedException | IOException ex) {
-                System.err.println(ex.getMessage());
-            }
+        try {
+            scrapeFreemans();
+            sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+        } catch (InterruptedException | IOException ex) {
+            System.err.println(ex.getMessage());
         }
-    }
-
-    // Terminates the thread.
-    public void stopThread() {
-        runThread = false;
     }
 
     /**

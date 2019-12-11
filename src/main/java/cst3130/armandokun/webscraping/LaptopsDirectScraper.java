@@ -30,9 +30,6 @@ public class LaptopsDirectScraper extends Thread {
     String productLinkSelector;
     String productLinkSelectorAttr;
 
-    // Allows us to shut down our application cleanly
-    volatile private boolean runThread = false;
-
     // Default Constructor
     public LaptopsDirectScraper() {
 
@@ -40,25 +37,17 @@ public class LaptopsDirectScraper extends Thread {
 
     @Override
     public void run() {
-        runThread = true;
-
-        while (runThread) {
-            try {
-                scrapeLaptopsDirect();
-                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            } catch (InterruptedException | IOException ex) {
-                System.err.println(ex.getMessage());
-            }
+        try {
+            scrapeLaptopsDirect();
+            sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+        } catch (InterruptedException | IOException ex) {
+            System.err.println(ex.getMessage());
         }
-    }
 
-    // Other classes can use this method to terminate the thread.
-    public void stopThread() {
-        runThread = false;
     }
 
     /**
-     * Scrapes Smartphone data from the Currys website
+     * Scrapes Smartphone data from the LaptopDirect website
      * 
      * @throws IOException
      * 

@@ -10,13 +10,10 @@ import org.jsoup.select.Elements;
  */
 public class OnbuyScraper extends Thread {
 
-    // Allows us to shut down our application cleanly
-    volatile private boolean runThread = false;
-
     // JSoup CSS selectors
 
-        // Specifies the interval between HTTP requests to the server in seconds.
-        public int crawlDelay;
+    // Specifies the interval between HTTP requests to the server in seconds.
+    public int crawlDelay;
 
     String storeName;
     String jsoupDoc;
@@ -32,30 +29,18 @@ public class OnbuyScraper extends Thread {
     String productLinkSelectorAttr;
 
     // Default Constructor
-    public OnbuyScraper() {}
-
-    // /**  Starts the scrapping thread */
-    // public void scrape(){
-    //     this.start();
-    // }
+    public OnbuyScraper() {
+    }
 
     @Override
     public void run() {
-        runThread = true;
 
-        while (runThread) {
-            try {
-                scrapeOnbuy();
-                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            } catch (InterruptedException | IOException ex) {
-                System.err.println(ex.getMessage());
-            }
+        try {
+            scrapeOnbuy();
+            sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+        } catch (InterruptedException | IOException ex) {
+            System.err.println(ex.getMessage());
         }
-    }
-
-    // Other classes can use this method to terminate the thread.
-    public void stopThread() {
-        runThread = false;
     }
 
     /**
@@ -104,8 +89,8 @@ public class OnbuyScraper extends Thread {
                 String productUrl = productLink.attr(productLinkSelectorAttr);
 
                 // Output the data that we have downloaded
-                System.out.println("\n " + storeName + ": " + description.text() + ";\n PRICE: " + price + ";\n IMAGE_URL: "
-                        + imageUrl + ";\n PRODUCT_URL: " + productUrl);
+                System.out.println("\n " + storeName + ": " + description.text() + ";\n PRICE: " + price
+                        + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
             }
         }
     }
@@ -200,19 +185,19 @@ public class OnbuyScraper extends Thread {
         this.productLinkSelectorAttr = productLinkSelectorAttr;
     }
 
-	public String getStoreName() {
-		return storeName;
-	}
+    public String getStoreName() {
+        return storeName;
+    }
 
-	public void setStoreName(String storeName) {
-		this.storeName = storeName;
-	}
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
-	public String getImageElSelector() {
-		return imageElSelector;
-	}
+    public String getImageElSelector() {
+        return imageElSelector;
+    }
 
-	public void setImageElSelector(String imageElSelector) {
-		this.imageElSelector = imageElSelector;
-	}
+    public void setImageElSelector(String imageElSelector) {
+        this.imageElSelector = imageElSelector;
+    }
 }

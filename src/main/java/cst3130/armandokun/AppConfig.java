@@ -9,7 +9,7 @@ import cst3130.armandokun.webscraping.*;
 public class AppConfig {
 
     @Bean
-    public OnbuyScraper OnBuy(){
+    public OnbuyScraper OnBuy() {
         OnbuyScraper onbuy = new OnbuyScraper();
 
         // Set a store name
@@ -34,7 +34,7 @@ public class AppConfig {
     }
 
     @Bean
-    public LaptopsDirectScraper LaptopsDirect(){
+    public LaptopsDirectScraper LaptopsDirect() {
         LaptopsDirectScraper ldscraper = new LaptopsDirectScraper();
 
         // Set a store name
@@ -58,7 +58,7 @@ public class AppConfig {
     }
 
     @Bean
-    public FreemansScraper Freemans(){
+    public FreemansScraper Freemans() {
         FreemansScraper fmScraper = new FreemansScraper();
 
         // Set a store name
@@ -66,9 +66,11 @@ public class AppConfig {
         // Multiplies sleep time in miliseconds
         fmScraper.setCrawlDelay(1);
         // Sets path to retrieve HTML for Jsoup
-        fmScraper.setJsoupDoc("https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText");
+        fmScraper.setJsoupDoc(
+                "https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText");
         // Sets path to retrieve HTML for other pages
-        fmScraper.setJsoupDocOtherPages("https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText&No=");
+        fmScraper.setJsoupDocOtherPages(
+                "https://www.freemans.com/electricals/phones/mobile-phones/_/N-1cZ1rZ1z13u09Z1z141dc?Ntt=phones&refined=leftnav&searchType=FullText&No=");
         fmScraper.setProductSelector("li.pContainer");
         fmScraper.setDescriptionSelector(".pDescriptionContainer");
         fmScraper.setPriceSelector(".pPriceContainer");
@@ -78,8 +80,60 @@ public class AppConfig {
         fmScraper.setImageUrlSelector("data-original");
         fmScraper.setProductLinkSelector("a");
         fmScraper.setProductLinkSelectorAttr("href");
-        
+
         return fmScraper;
+    }
+
+    @Bean
+    public CurrysScraper Currys() {
+        CurrysScraper currys = new CurrysScraper();
+
+        // Set a store name
+        currys.setStoreName("CURRYS");
+        // Multiplies sleep time in miliseconds
+        currys.setCrawlDelay(2);
+        // Sets path to retrieve HTML for Jsoup
+        currys.setJsoupDoc(
+                "https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/xx-criteria.html");
+        // Sets path to retrieve HTML for other pages
+        currys.setJsoupDocOtherPages(
+                "https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/");
+        currys.setProductSelector("article.product.result-prd.productCompare.clearfix");
+        currys.setDescriptionSelector(".productTitle");
+        currys.setPriceSelector(".price");
+        currys.setSymbolReplacement("£");
+        currys.setImageSelector(".lozadImage");
+        currys.setImageElSelector("source");
+        currys.setImageUrlSelector("srcset");
+        currys.setProductLinkSelector("a");
+        currys.setProductLinkSelectorAttr("href");
+
+        return currys;
+    }
+
+    @Bean
+    public ArgosScraper Argos() {
+        ArgosScraper argos = new ArgosScraper();
+
+        // Set a store name
+        argos.setStoreName("ARGOS");
+        // Multiplies sleep time in miliseconds
+        argos.setCrawlDelay(2);
+        // Sets path to retrieve HTML for Jsoup
+        argos.setJsoupDoc("https://www.argos.co.uk/search/iphones/category:42793786/");
+        // Sets path to retrieve HTML for other pages
+        argos.setJsoupDocOtherPages("https://www.argos.co.uk/search/iphones/category:42793786/opt/page:");
+        argos.setProductSelector(".ProductCardstyles__Wrapper-l8f8q8-0");
+        argos.setDescriptionSelector(".ProductCardstyles__Title-l8f8q8-11.kLyOND");
+        argos.setPriceSelector(".fHBARv");
+        argos.setSymbolReplacement("£");
+        argos.setImageSelector(".dnXqZD");
+        argos.setImageElSelector("img");
+        argos.setImageUrlSelector("src");
+        argos.setProductLinkSelector(".btn-cta");
+        argos.setProductLinkSelectorAttr("href");
+
+        return argos;
     }
 
     @Bean
@@ -90,7 +144,9 @@ public class AppConfig {
         scrapermng.scrapersList.add(LaptopsDirect());
         scrapermng.scrapersList.add(OnBuy());
         scrapermng.scrapersList.add(Freemans());
-        
+        scrapermng.scrapersList.add(Currys());
+        scrapermng.scrapersList.add(Argos());
+
         scrapermng.setScrapersList(scrapermng.scrapersList);
 
         return scrapermng;

@@ -11,11 +11,24 @@ import org.jsoup.select.Elements;
  * Freemans Scraper class that is scrapping data.
  */
 public class CurrysScraper extends Thread {
-    // Specifies the interval between HTTP requests to the server in seconds.
-    private int crawlDelay = 2;
 
-    // Allows us to shut down our application cleanly
-    volatile private boolean runThread = false;
+    // JSoup CSS selectors
+
+    // Specifies the interval between HTTP requests to the server in seconds.
+    public int crawlDelay;
+
+    String storeName;
+    String jsoupDoc;
+    String jsoupDocOtherPages;
+    String productSelector;
+    String descriptionSelector;
+    String priceSelector;
+    String symbolReplacement;
+    String imageSelector;
+    String imageElSelector;
+    String imageUrlSelector;
+    String productLinkSelector;
+    String productLinkSelectorAttr;
 
     // Default Constructor
     public CurrysScraper() {
@@ -24,21 +37,12 @@ public class CurrysScraper extends Thread {
 
     @Override
     public void run() {
-        runThread = true;
-
-        while (runThread) {
-            try {
-                scrapeCurrys();
-                sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            } catch (InterruptedException | IOException ex) {
-                System.err.println(ex.getMessage());
-            }
+        try {
+            scrapeCurrys();
+            sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+        } catch (InterruptedException | IOException ex) {
+            System.err.println(ex.getMessage());
         }
-    }
-
-    // Other classes can use this method to terminate the thread.
-    public void stopThread() {
-        runThread = false;
     }
 
     /**
@@ -50,7 +54,7 @@ public class CurrysScraper extends Thread {
     void scrapeCurrys() throws IOException {
         // Download HTML document from website
         Document doc = Jsoup.connect(
-                "https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/xx-criteria.html")
+                jsoupDoc)
                 .get();
 
         // Get total number of available pages
@@ -67,18 +71,18 @@ public class CurrysScraper extends Thread {
 
             // Converts int to String for correct url doc1
             String jsoupGet = String.valueOf(
-                    "https://www.currys.co.uk/gbuk/phones-broadband-and-sat-nav/mobile-phones-and-accessories/mobile-phones/362_3412_32041_xx_xx/"
+                    jsoupDocOtherPages
                             + pageNumber + "_20/relevance-desc/xx-criteria.html");
 
             // Download HTML document from website for the next page
             Document doc1 = Jsoup.connect(jsoupGet).get();
 
             // Get all of the products on the page 1
-            Elements products = doc.select("article.product.result-prd.productCompare.clearfix");
+            Elements products = doc.select(productSelector);
 
             if (pageNumber > 1) {
                 // Get all of the products in the next page
-                products = doc1.select("article.product.result-prd.productCompare.clearfix");
+                products = doc1.select(productSelector);
             }
 
             System.out.println("\n Page Number: " + pageNumber);
@@ -87,26 +91,130 @@ public class CurrysScraper extends Thread {
             for (int i = 0; i < products.size(); ++i) {
 
                 // Get the product description
-                Elements description = products.get(i).select(".productTitle");
+                Elements description = products.get(i).select(descriptionSelector);
 
                 // Get the product price
-                Elements price1 = products.get(i).select(".price");
+                Elements price1 = products.get(i).select(priceSelector);
 
                 // Deletes pound symbol from the price and formats to float
-                String scrapedPrice = price1.text().replace("£", "");
+                String scrapedPrice = price1.text().replace(symbolReplacement, "");
 
                 // Get the image url
-                Elements image = products.get(i).select(".lozadImage");
-                String imageUrl = image.select("source").attr("srcset");
+                Elements image = products.get(i).select(imageSelector);
+                String imageUrl = image.select(imageElSelector).attr(imageUrlSelector);
 
                 // Get product url
-                Elements productLink = products.get(i).select("a");
-                String productUrl = productLink.attr("href");
+                Elements productLink = products.get(i).select(productLinkSelector);
+                String productUrl = productLink.attr(productLinkSelectorAttr);
 
                 // Output the data that we have downloaded
-                System.out.println("\n CURRYS: " + description.text() + ";\n PRICE: " + scrapedPrice + ";\n IMAGE_URL: "
+                System.out.println("\n " + storeName + ": " + description.text() + ";\n PRICE: " + scrapedPrice + ";\n IMAGE_URL: "
                         + imageUrl + ";\n PRODUCT_URL: " + productUrl + ";");
             }
         }
+    }
+
+    public int getCrawlDelay() {
+        return crawlDelay;
+    }
+
+    public void setCrawlDelay(int crawlDelay) {
+        this.crawlDelay = crawlDelay;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getJsoupDoc() {
+        return jsoupDoc;
+    }
+
+    public void setJsoupDoc(String jsoupDoc) {
+        this.jsoupDoc = jsoupDoc;
+    }
+
+    public String getJsoupDocOtherPages() {
+        return jsoupDocOtherPages;
+    }
+
+    public void setJsoupDocOtherPages(String jsoupDocOtherPages) {
+        this.jsoupDocOtherPages = jsoupDocOtherPages;
+    }
+
+    public String getProductSelector() {
+        return productSelector;
+    }
+
+    public void setProductSelector(String productSelector) {
+        this.productSelector = productSelector;
+    }
+
+    public String getDescriptionSelector() {
+        return descriptionSelector;
+    }
+
+    public void setDescriptionSelector(String descriptionSelector) {
+        this.descriptionSelector = descriptionSelector;
+    }
+
+    public String getPriceSelector() {
+        return priceSelector;
+    }
+
+    public void setPriceSelector(String priceSelector) {
+        this.priceSelector = priceSelector;
+    }
+
+    public String getSymbolReplacement() {
+        return symbolReplacement;
+    }
+
+    public void setSymbolReplacement(String symbolReplacement) {
+        this.symbolReplacement = symbolReplacement;
+    }
+
+    public String getImageSelector() {
+        return imageSelector;
+    }
+
+    public void setImageSelector(String imageSelector) {
+        this.imageSelector = imageSelector;
+    }
+
+    public String getImageElSelector() {
+        return imageElSelector;
+    }
+
+    public void setImageElSelector(String imageElSelector) {
+        this.imageElSelector = imageElSelector;
+    }
+
+    public String getImageUrlSelector() {
+        return imageUrlSelector;
+    }
+
+    public void setImageUrlSelector(String imageUrlSelector) {
+        this.imageUrlSelector = imageUrlSelector;
+    }
+
+    public String getProductLinkSelector() {
+        return productLinkSelector;
+    }
+
+    public void setProductLinkSelector(String productLinkSelector) {
+        this.productLinkSelector = productLinkSelector;
+    }
+
+    public String getProductLinkSelectorAttr() {
+        return productLinkSelectorAttr;
+    }
+
+    public void setProductLinkSelectorAttr(String productLinkSelectorAttr) {
+        this.productLinkSelectorAttr = productLinkSelectorAttr;
     }
 }

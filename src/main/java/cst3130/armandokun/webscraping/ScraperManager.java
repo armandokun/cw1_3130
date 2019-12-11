@@ -2,7 +2,6 @@ package cst3130.armandokun.webscraping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ScraperManager extends Thread{
 
@@ -18,21 +17,9 @@ public class ScraperManager extends Thread{
             scraper.start();
         }
 
-        // Read input from user until they type 'stop'
-        Scanner scanner = new Scanner(System.in);
-        String userInput = scanner.nextLine();
-        while (!userInput.equals("stop")) {
-            userInput = scanner.nextLine();
-        }
-        scanner.close();
-
-
         // Wait for threads to finish - join can throw an InterruptedException
         try {
             for (Thread scraper : scrapersList) {
-
-                //Needs new solution ASAP
-                scraper.interrupt();
                 scraper.join();
             }
         } catch (InterruptedException ex) {

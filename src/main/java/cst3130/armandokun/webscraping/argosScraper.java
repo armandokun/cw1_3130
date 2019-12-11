@@ -9,11 +9,24 @@ import org.jsoup.select.Elements;
  * Argos Scraper class that is scrapping data.
  */
 public class ArgosScraper extends Thread {
-    // Specifies the interval between HTTP requests to the server in seconds.
-    private int crawlDelay = 1;
 
-    // Allows us to shut down our application cleanly
-    volatile private boolean runThread = false;
+    // JSoup CSS selectors
+
+    // Specifies the interval between HTTP requests to the server in seconds.
+    public int crawlDelay;
+
+    String storeName;
+    String jsoupDoc;
+    String jsoupDocOtherPages;
+    String productSelector;
+    String descriptionSelector;
+    String priceSelector;
+    String symbolReplacement;
+    String imageSelector;
+    String imageElSelector;
+    String imageUrlSelector;
+    String productLinkSelector;
+    String productLinkSelectorAttr;
 
     // Default Constructor
     public ArgosScraper() {
@@ -22,22 +35,12 @@ public class ArgosScraper extends Thread {
 
     @Override
     public void run() {
-        runThread = true;
-
-        while(runThread) {
-            try{
-                scrapeArgos();
-                sleep(1000 * crawlDelay);//Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
-            }
-            catch(InterruptedException | IOException ex) {
-                System.err.println(ex.getMessage());
-            }
+        try {
+            scrapeArgos();
+            sleep(1000 * crawlDelay);// Sleep is in milliseconds, so we need to multiply the crawl delay by 1000
+        } catch (InterruptedException | IOException ex) {
+            System.err.println(ex.getMessage());
         }
-    }
-
-    // Other classes can use this method to terminate the thread.
-    public void stopThread() {
-        runThread = false;
     }
 
     /**
@@ -47,7 +50,7 @@ public class ArgosScraper extends Thread {
      */
     void scrapeArgos() throws IOException {
         // Download HTML document from website
-        Document doc = Jsoup.connect("https://www.argos.co.uk/search/iphones/category:42793786/").get();
+        Document doc = Jsoup.connect(jsoupDoc).get();
 
         // Get total number of available pages
         Elements totalPages = doc.select(".hvbaxn");
@@ -57,15 +60,14 @@ public class ArgosScraper extends Thread {
         // Work through pages
         for (int pageNumber = 0; pageNumber <= pages; ++pageNumber) {
 
-            Document doc1 = Jsoup.connect("https://www.argos.co.uk/search/iphones/category:42793786/opt/page:" + pageNumber).get();
+            Document doc1 = Jsoup.connect(jsoupDocOtherPages + pageNumber).get();
 
             // Get all of the products on the page
-            Elements productsLayer = doc.select(".ProductCardstyles__Wrapper-l8f8q8-0");
-            Elements products = productsLayer.select(".dlOkBP");
+            Elements productsLayer = doc.select(productSelector);
+            Elements products = productsLayer.select(".dl0kBP");
 
             if (pageNumber > 0) {
-                productsLayer = doc1.select(".ProductCardstyles__Wrapper-l8f8q8-0");
-                products = productsLayer.select(".dlOkBP");
+                products = doc1.select(productSelector);
             }
 
             System.out.println("Page Number: " + pageNumber);
@@ -74,27 +76,131 @@ public class ArgosScraper extends Thread {
             for (int i = 0; i < products.size(); ++i) {
 
                 // Get the product description
-                Elements description = products.get(i).select(".ProductCardstyles__Title-l8f8q8-11.kLyOND");
+                Elements description = products.get(i).select(descriptionSelector);
 
                 // Get the product price
-                Elements price1 = products.get(i).select(".fHBARv");
+                Elements price1 = products.get(i).select(priceSelector);
 
                 // Deletes pound symbol from the price and formats to float
-                String scrapedPrice = price1.text().replace("£", "");
+                String scrapedPrice = price1.text().replace(symbolReplacement, "");
                 Float price = Float.parseFloat(scrapedPrice);
 
                 // Get the image url
-                Elements image = products.get(i).select(".dnXqZD");
-                String imageUrl = image.select("img").attr("src");
+                Elements image = products.get(i).select(imageSelector);
+                String imageUrl = image.select(imageElSelector).attr(imageUrlSelector);
 
                 // Get product url
-                Elements productLink = products.get(i).select(".btn-cta");
-                String productUrl = productLink.attr("href");
+                Elements productLink = products.get(i).select(productLinkSelector);
+                String productUrl = productLink.attr(productLinkSelectorAttr);
 
                 // Output the data that we have downloaded
-                System.out.println("\n ARGOS: " + "\n DESCRIPTION: " + description.text() + ";\n PRICE: " + price
-                        + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
+                System.out.println("\n " + storeName + ": " + "\n DESCRIPTION: " + description.text() + ";\n PRICE: "
+                        + price + ";\n IMAGE_URL: " + imageUrl + ";\n PRODUCT_URL: " + productUrl);
             }
         }
+    }
+
+    public int getCrawlDelay() {
+        return crawlDelay;
+    }
+
+    public void setCrawlDelay(int crawlDelay) {
+        this.crawlDelay = crawlDelay;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getJsoupDoc() {
+        return jsoupDoc;
+    }
+
+    public void setJsoupDoc(String jsoupDoc) {
+        this.jsoupDoc = jsoupDoc;
+    }
+
+    public String getJsoupDocOtherPages() {
+        return jsoupDocOtherPages;
+    }
+
+    public void setJsoupDocOtherPages(String jsoupDocOtherPages) {
+        this.jsoupDocOtherPages = jsoupDocOtherPages;
+    }
+
+    public String getProductSelector() {
+        return productSelector;
+    }
+
+    public void setProductSelector(String productSelector) {
+        this.productSelector = productSelector;
+    }
+
+    public String getDescriptionSelector() {
+        return descriptionSelector;
+    }
+
+    public void setDescriptionSelector(String descriptionSelector) {
+        this.descriptionSelector = descriptionSelector;
+    }
+
+    public String getPriceSelector() {
+        return priceSelector;
+    }
+
+    public void setPriceSelector(String priceSelector) {
+        this.priceSelector = priceSelector;
+    }
+
+    public String getSymbolReplacement() {
+        return symbolReplacement;
+    }
+
+    public void setSymbolReplacement(String symbolReplacement) {
+        this.symbolReplacement = symbolReplacement;
+    }
+
+    public String getImageSelector() {
+        return imageSelector;
+    }
+
+    public void setImageSelector(String imageSelector) {
+        this.imageSelector = imageSelector;
+    }
+
+    public String getImageElSelector() {
+        return imageElSelector;
+    }
+
+    public void setImageElSelector(String imageElSelector) {
+        this.imageElSelector = imageElSelector;
+    }
+
+    public String getImageUrlSelector() {
+        return imageUrlSelector;
+    }
+
+    public void setImageUrlSelector(String imageUrlSelector) {
+        this.imageUrlSelector = imageUrlSelector;
+    }
+
+    public String getProductLinkSelector() {
+        return productLinkSelector;
+    }
+
+    public void setProductLinkSelector(String productLinkSelector) {
+        this.productLinkSelector = productLinkSelector;
+    }
+
+    public String getProductLinkSelectorAttr() {
+        return productLinkSelectorAttr;
+    }
+
+    public void setProductLinkSelectorAttr(String productLinkSelectorAttr) {
+        this.productLinkSelectorAttr = productLinkSelectorAttr;
     }
 }
