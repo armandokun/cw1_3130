@@ -1,5 +1,6 @@
 package cst3130.armandokun;
 
+import cst3130.armandokun.hibernate.dao.ItemDao;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -11,6 +12,8 @@ import cst3130.armandokun.webscraping.*;
 
 @Configuration
 public class AppConfig {
+    // Creates an instance of SessionFactory
+    private SessionFactory sessionFactory;
 
     @Bean
     public OnbuyScraper OnBuy() {
@@ -156,9 +159,6 @@ public class AppConfig {
         return scrapermng;
     }
 
-    // Creates an instance of SessionFactory
-    private SessionFactory sessionFactory;
-
     @Bean
     public SessionFactory sessionFactory() {
 
@@ -192,6 +192,13 @@ public class AppConfig {
         }
 
         return sessionFactory;
+    }
+
+    @Bean
+    public ItemDao productDao() {
+        ItemDao productDao = new ItemDao();
+        productDao.setSessionFactory(sessionFactory());
+        return productDao;
     }
 
 }

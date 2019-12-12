@@ -1,7 +1,5 @@
 package cst3130.armandokun;
 
-import cst3130.armandokun.hibernate.HibernateAnnotation;
-import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import cst3130.armandokun.webscraping.*;

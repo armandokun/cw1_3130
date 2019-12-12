@@ -22,6 +22,8 @@
     
     <!-- Mapping with annotation - specify the annotated classes here -->
     <mapping class="cst3130.armandokun.hibernate.Products"/>
+    <mapping class="cst3130.armandokun.hibernate.Urls"/>
+    <mapping class="cst3130.armandokun.hibernate.Phones"/>
     
   </session-factory>
 </hibernate-configuration>

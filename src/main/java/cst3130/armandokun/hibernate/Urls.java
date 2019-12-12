@@ -1,13 +1,15 @@
 package cst3130.armandokun.hibernate;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 
 /** Represents a Url.
     Java annotation is used for the mapping. */
 @Entity
 @Table(name="url")
-public class Urls {
+public class Urls implements Serializable {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,6 +23,11 @@ public class Urls {
     
     @Column(name = "query_string")
     private float queryString;
+
+    // Foreign key mapping to Phones
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "url_id")
+    Set<Phones> phone;
 
     
     /** Empty constructor */

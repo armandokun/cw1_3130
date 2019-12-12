@@ -70,23 +70,23 @@ public class FreemansScraper extends Thread {
             System.out.println("Page Offset: " + pageNumber);
 
             // Work through the products
-            for (int i = 0; i < products.size(); ++i) {
+            for (org.jsoup.nodes.Element product : products) {
 
                 // Get the product description
-                Elements description = products.get(i).select(descriptionSelector);
+                Elements description = product.select(descriptionSelector);
 
                 // Get the product price
-                Elements price1 = products.get(i).select(priceSelector);
+                Elements price1 = product.select(priceSelector);
 
                 // Deletes pound symbol from the price and formats to float
                 String scrapedPrice = price1.text().replace(symbolReplacement, "");
 
                 // Get the image url
-                Elements image = products.get(i).select(imageSelector);
+                Elements image = product.select(imageSelector);
                 String imageUrl = image.select(imageElSelector).attr(imageUrlSelector);
 
                 // Get product url
-                Elements productLink = products.get(i).select(productLinkSelector);
+                Elements productLink = product.select(productLinkSelector);
                 String productUrl = productLink.attr(productLinkSelectorAttr);
 
                 // Output the data that we have downloaded

@@ -1,13 +1,15 @@
 package cst3130.armandokun.hibernate;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 
 /** Represents a Product.
     Java annotation is used for the mapping. */
 @Entity
 @Table(name="products")
-public class Products {
+public class Products implements Serializable {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,6 +20,11 @@ public class Products {
     
     @Column(name = "description")
     private String description;
+
+    // Foreign key mapping
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "product_id")
+    Set<Phones> phone;
 
     
     /** Empty constructor */
