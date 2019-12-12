@@ -1,2 +1,4 @@
-cst3130/armandokun/App.class
-cst3130/armandokun/AppConfig.class
+cst3130/armandokun/hibernate/Urls.class
+cst3130/armandokun/hibernate/Products.class
+cst3130/armandokun/hibernate/Phones.class
+cst3130/armandokun/hibernate/HibernateAnnotation.class

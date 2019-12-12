@@ -139,22 +139,6 @@
         </executions>
       </plugin>
     </plugins>
-    <resources>
-      <!-- beans.xml file-->
-      <resource>
-        <directory>src</directory>
-        <includes>
-          <include>beans.xml</include>
-        </includes>
-      </resource>
-      <!-- Hibernate configuration files-->
-      <resource>
-        <directory>src</directory>
-        <includes>
-          <include>resources/hibernate.cfg.xml</include>
-        </includes>
-      </resource>
-    </resources>
   </build>
   <reporting>
     <plugins>
