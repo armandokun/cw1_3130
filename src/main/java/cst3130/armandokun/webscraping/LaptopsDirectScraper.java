@@ -125,7 +125,8 @@ public class LaptopsDirectScraper extends Thread {
                 // Get product url
                 Elements productLink = element.select(productLinkSelector);
                 String productUrl = productLink.attr(productLinkSelectorAttr);
-                url.setProductUrl("laptopsdirect.co.uk" + productUrl);
+                String productUrlFull = "laptopsdirect.co.uk" + productUrl;
+                url.setProductUrl(productUrlFull);
 
                 product.setStoreName(storeName);
 
@@ -139,7 +140,7 @@ public class LaptopsDirectScraper extends Thread {
                 session.beginTransaction();
 
                 // Check if there are duplicates
-                if (!productDao.duplicateExist(productUrl, session)) {
+                if (!productDao.duplicateExist(productUrlFull, session)) {
 
                     // Set Foreign keys
                     phone.setProductId(product);
