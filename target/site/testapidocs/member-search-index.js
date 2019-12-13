@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"cst3130.armandokun","c":"AppTest","l":"AppTest()","url":"%3Cinit%3E()"},{"p":"cst3130.armandokun","c":"AppTest","l":"shouldAnswerWithTrue()"}]

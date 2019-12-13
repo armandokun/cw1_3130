@@ -1,4 +1,12 @@
 cst3130/armandokun/hibernate/Urls.class
+cst3130/armandokun/App.class
 cst3130/armandokun/hibernate/Products.class
+cst3130/armandokun/webscraping/FreemansScraper.class
 cst3130/armandokun/hibernate/Phones.class
+cst3130/armandokun/webscraping/ArgosScraper.class
+cst3130/armandokun/webscraping/LaptopsDirectScraper.class
+cst3130/armandokun/webscraping/ScraperManager.class
 cst3130/armandokun/hibernate/dao/ItemDao.class
+cst3130/armandokun/webscraping/CurrysScraper.class
+cst3130/armandokun/webscraping/OnbuyScraper.class
+cst3130/armandokun/AppConfig.class
