@@ -1,0 +1,36 @@
+GET http://localhost:8080/phones
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://192.168.64.2:3306/phones
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://192.168.64.2/phones
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-12-13T121714.404.html
+
+###
+
+GET http://192.168.64.2/phones
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-12-13T121310.404.html
+
+###
+
+GET http://192.168.64.2/phones
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-12-13T121234.404.html
+
+###
+
