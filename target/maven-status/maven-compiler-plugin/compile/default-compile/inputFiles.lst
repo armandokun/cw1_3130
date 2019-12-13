@@ -1,8 +1,12 @@
-/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/freemansScraper.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/hibernate/Products.java
 /Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/App.java
 /Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/ScraperManager.java
-/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/onbuyScraper.java
 /Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/CurrysScraper.java
-/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/argosScraper.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/OnbuyScraper.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/FreemansScraper.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/ArgosScraper.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/hibernate/dao/ItemDao.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/hibernate/Phones.java
 /Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/AppConfig.java
+/Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/hibernate/Urls.java
 /Users/Armando/Desktop/cw1_3130/src/main/java/cst3130/armandokun/webscraping/LaptopsDirectScraper.java

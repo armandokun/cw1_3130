@@ -1,14 +1,13 @@
 package cst3130.armandokun;
 
 import cst3130.armandokun.hibernate.dao.ItemDao;
+import cst3130.armandokun.webscraping.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import cst3130.armandokun.webscraping.*;
 
 @Configuration
 public class AppConfig {
@@ -19,6 +18,7 @@ public class AppConfig {
     public OnbuyScraper OnBuy() {
         OnbuyScraper onbuy = new OnbuyScraper();
 
+        onbuy.setProductDao(productDao());
         // Set a store name
         onbuy.setStoreName("ONBUY");
         // Multiplies sleep time in miliseconds
@@ -44,6 +44,7 @@ public class AppConfig {
     public LaptopsDirectScraper LaptopsDirect() {
         LaptopsDirectScraper ldscraper = new LaptopsDirectScraper();
 
+        ldscraper.setProductDao(productDao());
         // Set a store name
         ldscraper.setStoreName("LAPTOPS DIRECT");
         // Multiplies sleep time in miliseconds
@@ -68,6 +69,7 @@ public class AppConfig {
     public FreemansScraper Freemans() {
         FreemansScraper fmScraper = new FreemansScraper();
 
+        fmScraper.setProductDao(productDao());
         // Set a store name
         fmScraper.setStoreName("FREEMANS");
         // Multiplies sleep time in miliseconds
@@ -95,6 +97,7 @@ public class AppConfig {
     public CurrysScraper Currys() {
         CurrysScraper currys = new CurrysScraper();
 
+        currys.setProductDao(productDao());
         // Set a store name
         currys.setStoreName("CURRYS");
         // Multiplies sleep time in miliseconds
@@ -122,6 +125,7 @@ public class AppConfig {
     public ArgosScraper Argos() {
         ArgosScraper argos = new ArgosScraper();
 
+        argos.setProductDao(productDao());
         // Set a store name
         argos.setStoreName("ARGOS");
         // Multiplies sleep time in miliseconds
@@ -161,37 +165,39 @@ public class AppConfig {
 
     @Bean
     public SessionFactory sessionFactory() {
-
-        try {
-            //Create a builder for the standard service registry
-            StandardServiceRegistryBuilder standardServiceRegistryBuilder = new StandardServiceRegistryBuilder();
-
-            //Load configuration from hibernate configuration file.
-            //Here we are using a configuration file that specifies Java annotations.
-            standardServiceRegistryBuilder.configure();
-
-            //Create the registry that will be used to build the session factory
-            StandardServiceRegistry registry = standardServiceRegistryBuilder.build();
+        if (sessionFactory == null) {
             try {
-                //Create the session factory - this is the goal of the init method.
-                sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-            } catch (Exception e) {
+                //Create a builder for the standard service registry
+                StandardServiceRegistryBuilder standardServiceRegistryBuilder = new StandardServiceRegistryBuilder();
+
+                //Load configuration from hibernate configuration file.
+                //Here we are using a configuration file that specifies Java annotations.
+                standardServiceRegistryBuilder.configure();
+
+                //Create the registry that will be used to build the session factory
+                StandardServiceRegistry registry = standardServiceRegistryBuilder.build();
+                try {
+                    //Create the session factory - this is the goal of the init method.
+                    sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+                } catch (Exception e) {
                     /* The registry would be destroyed by the SessionFactory,
                         but we had trouble building the SessionFactory, so destroy it manually */
-                System.err.println("Session Factory build failed.");
-                e.printStackTrace();
-                StandardServiceRegistryBuilder.destroy(registry);
+                    System.err.println("Session Factory build failed.");
+                    e.printStackTrace();
+                    StandardServiceRegistryBuilder.destroy(registry);
+                }
+
+                //Output result
+                System.out.println("Session factory built.");
+
+            } catch (Throwable ex) {
+                // Make sure you log the exception, as it might be swallowed
+                System.err.println("SessionFactory creation failed." + ex);
             }
-
-            //Output result
-            System.out.println("Session factory built.");
-
-        } catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
-            System.err.println("SessionFactory creation failed." + ex);
         }
 
         return sessionFactory;
+
     }
 
     @Bean

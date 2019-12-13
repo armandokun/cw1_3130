@@ -10,9 +10,7 @@ public class ItemDao {
     //Create an instance of session factory
     private SessionFactory sessionFactory;
 
-    /**
-     * Empty constructor
-     */
+    // Empty Constructor
     public ItemDao() {
     }
 
@@ -24,18 +22,14 @@ public class ItemDao {
         return sessionFactory;
     }
 
-    public Boolean duplicateExist(String domain, String path, String queryString, Session session) {
+    public Boolean duplicateExist(String productUrl, Session session) {
+
         //Find matching products in the database
-        List<Urls> urlList = session.createQuery("FROM url WHERE domain='" + domain +
-                "' AND path='" + path + "' AND query_string='" + queryString + "'")
+        List<Urls> urlList = session.createQuery("FROM Urls WHERE productUrl='" + productUrl + "'")
                 .getResultList();
 
-        //If there is one or more products, the duplicate exists and there is no need to create a new product
-        if (urlList.size() >= 1) {
-            return true;
-            //Else we return false - no duplicates
-        } else {
-            return false;
-        }
+        // If there is one or more products, the duplicate exists and there is no need to create a new product
+        return urlList.size() >= 1;
     }
+
 }

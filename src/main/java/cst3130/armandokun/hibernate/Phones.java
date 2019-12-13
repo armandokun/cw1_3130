@@ -14,14 +14,16 @@ public class Phones implements Serializable {
     @Column(name = "id")
     private int id;
 
-    //Foreign key mapping to product
+    // Foreign key mapping
     @ManyToOne
     @JoinColumn(name = "product_id")
+    private
     Products productId;
 
-    //Foreign key mapping to url
+    // Foreign key mapping
     @ManyToOne
     @JoinColumn(name = "url_id")
+    private
     Urls urlId;
 
     @Column(name = "price")
@@ -31,15 +33,7 @@ public class Phones implements Serializable {
     /** Empty constructor */
     public Phones(){
     }
-    
 
-        
-    /** Returns a String representation of the Cereal */
-    public String toString(){
-        String str = "Phone id: " + id + "; productTypeId: " + productId + 
-        "; urlId: " + urlId + "; price: " + price;
-        return str;
-    }
 
     public int getId() {
         return id;
@@ -55,5 +49,21 @@ public class Phones implements Serializable {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public Products getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Products productId) {
+        this.productId = productId;
+    }
+
+    public Urls getUrlId() {
+        return urlId;
+    }
+
+    public void setUrlId(Urls urlId) {
+        this.urlId = urlId;
     }
 }

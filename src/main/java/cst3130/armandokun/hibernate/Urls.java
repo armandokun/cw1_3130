@@ -5,43 +5,34 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-/** Represents a Url.
-    Java annotation is used for the mapping. */
+/**
+ * Represents a Url.
+ * Java annotation is used for the mapping.
+ */
 @Entity
-@Table(name="url")
+@Table(name = "url")
 public class Urls implements Serializable {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    
-    @Column(name = "domain")
-    private int domain;
-    
-    @Column(name = "path")
-    private int path;
-    
-    @Column(name = "query_string")
-    private float queryString;
+
+    @Column(name = "product_url")
+    private String productUrl;
 
     // Foreign key mapping to Phones
     @OneToMany(cascade = CascadeType.MERGE)
     @JoinColumn(name = "url_id")
+    private
     Set<Phones> phone;
 
-    
-    /** Empty constructor */
-    public Urls(){
-    }
-    
 
-        
-    /** Returns a String representation of the Url */
-    public String toString(){
-        String str = "Url id: " + id + "; domain: " + domain + 
-        "; path: " + path + "; query_string: " + queryString;
-        return str;
+    /**
+     * Empty constructor
+     */
+    public Urls() {
     }
+
 
     public int getId() {
         return id;
@@ -51,28 +42,20 @@ public class Urls implements Serializable {
         this.id = id;
     }
 
-    public int getDomain() {
-        return domain;
+
+    public String getProductUrl() {
+        return productUrl;
     }
 
-    public void setDomain(int domain) {
-        this.domain = domain;
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
     }
 
-    public int getPath() {
-        return path;
+    public Set<Phones> getPhone() {
+        return phone;
     }
 
-    public void setPath(int path) {
-        this.path = path;
+    public void setPhone(Set<Phones> phone) {
+        this.phone = phone;
     }
-
-    public float getQueryString() {
-        return queryString;
-    }
-
-    public void setQueryString(float queryString) {
-        this.queryString = queryString;
-    }
-
 }
